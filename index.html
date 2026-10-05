@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Refleksi — 7 Jenis Pencerminan (Kelas 9)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; background: #eef2f7; color: #1e293b; font-size: 15px; line-height: 1.7; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 20px; }
+  header { background: linear-gradient(135deg, #0a3d91, #1e6fd9); color: #fff; padding: 26px 20px; text-align: center; border-radius: 0 0 18px 18px; }
+  header h1 { font-size: 21px; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: .9; }
+  .soal { background: #fff; border-radius: 14px; padding: 18px 20px; margin: 14px 0; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .soal .jenis { display: inline-block; font-size: 11.5px; font-weight: 700; color: #0a3d91; background: #dbeafe; padding: 3px 12px; border-radius: 20px; margin-bottom: 8px; }
+  .soal .tanya { font-weight: 600; margin-bottom: 10px; }
+  .opsi label { display: block; padding: 9px 14px; margin: 6px 0; border: 1.5px solid #cbd5e1; border-radius: 10px; cursor: pointer; transition: .15s; }
+  .opsi label:hover { border-color: #1e6fd9; background: #f0f7ff; }
+  .opsi input { margin-right: 10px; accent-color: #1e6fd9; }
+  .opsi label.benar { border-color: #16a34a; background: #f0fdf4; }
+  .opsi label.salah { border-color: #dc2626; background: #fef2f2; }
+  .bahas { display: none; margin-top: 10px; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 10px 14px; font-size: 13.5px; }
+  .aksi { text-align: center; margin: 22px 0; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .aksi button { padding: 13px 34px; font-size: 15.5px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; color: #fff; }
+  #btn-kumpul { background: #16a34a; } #btn-kumpul:hover { background: #15803d; }
+  #btn-ulang { background: #64748b; display: none; } #btn-ulang:hover { background: #475569; }
+  #hasil { display: none; background: #fff; border-radius: 14px; padding: 22px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06); margin-bottom: 20px; }
+  #hasil .skor { font-size: 44px; font-weight: 800; color: #0a3d91; }
+  footer { text-align: center; font-size: 12px; color: #94a3b8; padding: 16px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📝 Kuis Refleksi — 7 Jenis Pencerminan</h1>
+  <p>Matematika Kelas 9 &bull; Transformasi Geometri &bull; 10 Soal Pilihan Ganda</p>
+</header>
+
+<div class="wrap">
+  <div id="hasil"><div class="skor" id="skor"></div><div id="pesan"></div></div>
+  <div id="daftar"></div>
+  <div class="aksi">
+    <button id="btn-kumpul" onclick="kumpulkan()">Kumpulkan Jawaban</button>
+    <button id="btn-ulang" onclick="location.reload()">🔄 Ulangi</button>
+  </div>
+</div>
+
+<footer>7 jenis refleksi: sumbu X, sumbu Y, garis y = x, garis y = –x, garis x = h, garis y = k, titik O(0, 0)</footer>
+
+<script>
+const SOAL = [
+ {jenis:"Refleksi terhadap sumbu X", tanya:"Titik A(3, –4) dicerminkan terhadap <b>sumbu X</b>. Koordinat bayangannya adalah …",
+  opsi:["(3, 4)","(–3, –4)","(3, –4)","(–3, 4)"], kunci:0,
+  bahas:"Rumus: (x, y) → (x, –y). Jadi A(3, –4) → A′(3, 4)."},
+ {jenis:"Refleksi terhadap sumbu Y", tanya:"Titik B(–5, 2) dicerminkan terhadap <b>sumbu Y</b>. Koordinat bayangannya adalah …",
+  opsi:["(–5, –2)","(5, 2)","(–5, 2)","(5, –2)"], kunci:1,
+  bahas:"Rumus: (x, y) → (–x, y). Jadi B(–5, 2) → B′(5, 2)."},
+ {jenis:"Refleksi terhadap garis y = x", tanya:"Titik C(6, –1) dicerminkan terhadap <b>garis y = x</b>. Koordinat bayangannya adalah …",
+  opsi:["(–1, 6)","(6, –1)","(1, –6)","(–6, 1)"], kunci:0,
+  bahas:"Rumus: (x, y) → (y, x). Jadi C(6, –1) → C′(–1, 6)."},
+ {jenis:"Refleksi terhadap garis y = –x", tanya:"Titik D(–2, 7) dicerminkan terhadap <b>garis y = –x</b>. Koordinat bayangannya adalah …",
+  opsi:["(7, –2)","(–2, 7)","(–7, 2)","(2, –7)"], kunci:2,
+  bahas:"Rumus: (x, y) → (–y, –x). Jadi D(–2, 7) → D′(–7, 2)."},
+ {jenis:"Refleksi terhadap garis x = h", tanya:"Titik E(1, 5) dicerminkan terhadap <b>garis x = 3</b>. Koordinat bayangannya adalah …",
+  opsi:["(5, 5)","(–1, 5)","(1, 1)","(5, 1)"], kunci:0,
+  bahas:"Rumus: (x, y) → (2h – x, y). Jadi E(1, 5) → E′(2·3 – 1, 5) = E′(5, 5)."},
+ {jenis:"Refleksi terhadap garis y = k", tanya:"Titik F(–4, 2) dicerminkan terhadap <b>garis y = –1</b>. Koordinat bayangannya adalah …",
+  opsi:["(–4, –4)","(–4, 4)","(4, 2)","(–4, 0)"], kunci:0,
+  bahas:"Rumus: (x, y) → (x, 2k – y). Jadi F(–4, 2) → F′(–4, 2·(–1) – 2) = F′(–4, –4)."},
+ {jenis:"Refleksi terhadap titik O(0, 0)", tanya:"Titik G(–3, –6) dicerminkan terhadap <b>titik O(0, 0)</b>. Koordinat bayangannya adalah …",
+  opsi:["(3, 6)","(–3, 6)","(3, –6)","(–3, –6)"], kunci:0,
+  bahas:"Rumus: (x, y) → (–x, –y). Jadi G(–3, –6) → G′(3, 6)."},
+ {jenis:"Menentukan garis cermin x = h", tanya:"Titik P(2, 8) dicerminkan terhadap <b>garis x = h</b> menghasilkan bayangan P′(6, 8). Nilai h adalah …",
+  opsi:["2","3","4","8"], kunci:2,
+  bahas:"2h – x = x′ → 2h – 2 = 6 → 2h = 8 → h = 4."},
+ {jenis:"Menentukan garis cermin y = k", tanya:"Titik R(–1, 7) dicerminkan terhadap <b>garis y = k</b> menghasilkan bayangan R′(–1, –3). Nilai k adalah …",
+  opsi:["–2","2","5","–5"], kunci:1,
+  bahas:"2k – y = y′ → 2k – 7 = –3 → 2k = 4 → k = 2."},
+ {jenis:"Refleksi berurutan (HOTS)", tanya:"Titik Q(5, –2) dicerminkan terhadap <b>garis y = x</b>, kemudian hasilnya dicerminkan terhadap <b>sumbu X</b>. Bayangan akhirnya adalah …",
+  opsi:["(–2, –5)","(2, 5)","(–2, 5)","(5, 2)"], kunci:0,
+  bahas:"Q(5, –2) → (y, x) → (–2, 5) → (x, –y) → (–2, –5)."},
+];
+const HURUF = ["A","B","C","D"];
+
+function bangun(){
+  document.getElementById("daftar").innerHTML = SOAL.map((s,i) =>
+    `<div class="soal" id="soal${i}">
+       <span class="jenis">${i+1}. ${s.jenis}</span>
+       <div class="tanya">${s.tanya}</div>
+       <div class="opsi">` +
+       s.opsi.map((o,j) =>
+         `<label id="l${i}_${j}"><input type="radio" name="q${i}" value="${j}"><b>${HURUF[j]}.</b> ${o}</label>`
+       ).join("") +
+       `</div><div class="bahas" id="b${i}">💡 <b>Pembahasan:</b> ${s.bahas}</div>
+     </div>`
+  ).join("");
+}
+
+function kumpulkan(){
+  let benar = 0, belum = 0;
+  SOAL.forEach((s,i) => {
+    const cek = document.querySelector(`input[name="q${i}"]:checked`);
+    if(!cek){ belum++; return; }
+    const j = +cek.value;
+    document.getElementById(`l${i}_${s.kunci}`).classList.add("benar");
+    if(j === s.kunci) benar++;
+    else document.getElementById(`l${i}_${j}`).classList.add("salah");
+    document.getElementById(`b${i}`).style.display = "block";
+  });
+  if(belum){
+    alert(`Masih ada ${belum} soal yang belum dijawab.`);
+    // tetap tampilkan yang sudah dinilai? tidak — ulangi validasi saja
+    SOAL.forEach((s,i) => {
+      document.getElementById(`l${i}_${s.kunci}`).classList.remove("benar");
+      document.getElementById(`b${i}`).style.display = "none";
+      s.opsi.forEach((_,j) => document.getElementById(`l${i}_${j}`).classList.remove("salah"));
+    });
+    return;
+  }
+  const nilai = benar * 10;
+  document.getElementById("skor").textContent = nilai;
+  document.getElementById("pesan").innerHTML =
+    nilai === 100 ? "🎉 Sempurna! Kamu menguasai ketujuh jenis refleksi." :
+    nilai >= 70 ? "👍 Bagus! Sedikit lagi sempurna." :
+    "💪 Terus berlatih! Pelajari kembali pembahasan tiap soal.";
+  document.getElementById("hasil").style.display = "block";
+  document.getElementById("btn-kumpul").style.display = "none";
+  document.getElementById("btn-ulang").style.display = "inline-block";
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+bangun();
+</script>
+</body>
+</html>
